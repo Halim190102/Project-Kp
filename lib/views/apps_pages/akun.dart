@@ -59,7 +59,7 @@ class _MyAkunState extends State<MyAkun> {
                 setState(() {});
               },
               child: const Text(
-                'Galerry',
+                'Galery',
               ),
             ),
             Container(
