@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:koperasi/views/apps_pages/data_listView/add_data.dart';
 
 class ListKecamatan extends StatelessWidget {
   const ListKecamatan({
     Key? key,
     required this.kecamatans,
+    this.id,
   }) : super(key: key);
 
   final String? kecamatans;
+  final int? id;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,9 @@ class ListKecamatan extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => AddData(idData: id)));
+            },
             icon: const Icon(
               Icons.add_circle_rounded,
               color: Colors.blueGrey,

@@ -100,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               FormCom(
                                 controller: _nikController,
-                                label: 'Masukkan NIK',
+                                label: 'NIK',
                                 valid: (e) => Validator.validateNIK(e),
                                 icon: false,
                                 obscure: false,

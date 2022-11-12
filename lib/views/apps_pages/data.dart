@@ -4,45 +4,72 @@ import 'package:koperasi/views/apps_pages/data_listView/listview_kecamatan.dart'
 import 'package:koperasi/views/component/animation/loading.dart';
 import 'package:provider/provider.dart';
 
-class DataPenduduk extends StatefulWidget {
-  const DataPenduduk({Key? key}) : super(key: key);
+class DataPendudukView extends StatefulWidget {
+  const DataPendudukView({Key? key}) : super(key: key);
 
   @override
-  State<DataPenduduk> createState() => _DataPendudukState();
+  State<DataPendudukView> createState() => _DataPendudukViewState();
 }
 
-class _DataPendudukState extends State<DataPenduduk> {
+class _DataPendudukViewState extends State<DataPendudukView> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    KecamatanProvider viewModel = Provider.of<KecamatanProvider>(context, listen: false);
     return RefreshIndicator(
       onRefresh: () {
-        return Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
+        return viewModel.getKecamatan();
       },
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: Consumer<KecamatanProvider>(
-          builder: (context, value, child) {
-            final datas = value.kecamatan;
-            if (datas == null) {
-              return const Load();
-            } else {
-              return ListView.separated(
-                itemBuilder: (ctx, i) {
-                  final myData = datas.data![i];
-                  return ListData(
-                    myData: myData,
-                  );
-                },
-                separatorBuilder: (ctx, i) {
-                  return const SizedBox(
-                    height: 10,
-                  );
-                },
-                itemCount: datas.data!.length,
-              );
-            }
-          },
-        ),
+      child: child(viewModel),
+    );
+  }
+
+  Widget child(KecamatanProvider viewModel) {
+    final isLoading = viewModel.state == ViewState.loading;
+    final isError = viewModel.state == ViewState.error;
+
+    if (isLoading && viewModel.kecamatan == null) {
+      return const Load();
+    }
+    if (isError) {
+      return const Center(
+        child: Text('Gagal memuat data.'),
+      );
+    }
+    return listView(viewModel);
+  }
+
+  Widget listView(KecamatanProvider viewModel) {
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: Consumer<KecamatanProvider>(
+        builder: (context, value, child) {
+          final datas = value.kecamatan;
+
+          return datas != null
+              ? ListView.separated(
+                  itemBuilder: (ctx, i) {
+                    final myData = datas.data![i];
+                    return ListData(
+                      myData: myData,
+                    );
+                  },
+                  separatorBuilder: (ctx, i) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemCount: datas.data!.length,
+                )
+              : const SizedBox();
+        },
       ),
     );
   }

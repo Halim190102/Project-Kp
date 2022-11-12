@@ -13,9 +13,6 @@ class MyRouter {
       case LoginPage.id:
         return MaterialPageRoute(builder: (_) => const LoginPage());
 
-      // case ResetPasswordScreen.id:
-      //   return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
-
       case Home.id:
         return MaterialPageRoute(builder: (_) => const Home());
 

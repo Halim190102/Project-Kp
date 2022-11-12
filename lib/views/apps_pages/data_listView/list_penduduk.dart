@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
+import 'package:koperasi/views/apps_pages/data_listView/data_penduduk.dart';
 import 'package:koperasi/views/component/iconButton/iconbuttonservice.dart';
 
 class ListPenduduk extends StatelessWidget {
@@ -42,7 +43,13 @@ class ListPenduduk extends StatelessWidget {
                   ButtonServices(
                     icon: Icons.menu_open,
                     color: Colors.black,
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => DialogData(data: penduduk),
+                      );
+                    },
                   ),
                   ButtonServices(
                     icon: Icons.edit,

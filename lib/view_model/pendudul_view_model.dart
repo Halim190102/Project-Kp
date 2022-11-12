@@ -1,14 +1,31 @@
-// import 'package:flutter/material.dart';
-// import 'package:koperasi/api/kecamatan_api.dart';
-// import 'package:koperasi/model/penduduk_model.dart';
+import 'package:flutter/material.dart';
+import 'package:koperasi/api/api.dart';
 
-// class PendudukProvider with ChangeNotifier {
-//   final Api api = Api();
-//   DataPendudukModel? penduduk;
-
-//   Future getPenduduk() async {
-//     penduduk = await api.getPenduduk();
-//     // print(penduduk);
-//     notifyListeners();
-//   }
-// }
+class PendudukProvider with ChangeNotifier {
+  Future addData(
+    int kecId,
+    String nama,
+    String nik,
+    String telp,
+    String desaLurah,
+    String alamat,
+    String email,
+    String tempat,
+    String tanggal,
+    String gender,
+  ) async {
+    await Api().addDataPenduduk(
+      kecId,
+      nama,
+      nik,
+      telp,
+      desaLurah,
+      alamat,
+      email,
+      tempat,
+      tanggal,
+      gender,
+    );
+    notifyListeners();
+  }
+}
