@@ -165,9 +165,11 @@ class FormComDropdown extends StatefulWidget {
     Key? key,
     required this.label,
     required this.data,
+    this.value,
   }) : super(key: key);
   final String label;
   final Function(String?) data;
+  final String? value;
 
   @override
   State<FormComDropdown> createState() => _FormComDropdownState();
@@ -210,7 +212,7 @@ class _FormComDropdownState extends State<FormComDropdown> {
             ),
             isDense: true,
           ),
-          value: jenisKelamin,
+          value: widget.value!.isEmpty ? jenisKelamin : widget.value,
           items: const [
             DropdownMenuItem(value: "Pria", child: Text("Pria")),
             DropdownMenuItem(value: "Wanita", child: Text("Wanita")),

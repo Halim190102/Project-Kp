@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:koperasi/model/kecamatan_model.dart';
 import 'package:koperasi/utils/validator.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/apps_pages/home.dart';
@@ -11,9 +12,13 @@ import 'package:provider/provider.dart';
 class AddData extends StatefulWidget {
   const AddData({
     Key? key,
-    required this.idData,
+    required this.init,
+    this.idKec,
+    this.penduduk,
   }) : super(key: key);
-  final int? idData;
+  final Datapenduduk? penduduk;
+  final int? idKec;
+  final bool init;
 
   @override
   State<AddData> createState() => _AddDataState();
@@ -30,6 +35,27 @@ class _AddDataState extends State<AddData> {
   final _tempatController = TextEditingController();
   final _tglController = TextEditingController();
   final _genderController = TextEditingController();
+
+  int? idPenduduk;
+  bool _isUpdate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.penduduk != null) {
+      idPenduduk = widget.penduduk!.id;
+      _namaController.text = widget.penduduk!.nama!;
+      _nikController.text = widget.penduduk!.nik!;
+      _telpController.text = widget.penduduk!.telp!;
+      _desalurahController.text = widget.penduduk!.desaLurah!;
+      _alamatController.text = widget.penduduk!.alamat!;
+      _emailController.text = widget.penduduk!.email!;
+      _tempatController.text = widget.penduduk!.tempatLahir!;
+      _tglController.text = widget.penduduk!.tanggalLahir!;
+      _genderController.text = widget.penduduk!.jenisKelamin!;
+      _isUpdate = true;
+    }
+  }
 
   @override
   void dispose() {
@@ -50,7 +76,6 @@ class _AddDataState extends State<AddData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: rawOrange,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -59,10 +84,10 @@ class _AddDataState extends State<AddData> {
             icon: const Icon(CupertinoIcons.back)),
         centerTitle: true,
         backgroundColor: red,
-        title: const Text('Tambah Data'),
+        title: Text(widget.init ? 'Tambah Data' : 'Edit Data'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: Icon(widget.init ? Icons.add : Icons.save),
             onPressed: () async {
               final nama = _namaController.text;
               final nik = _nikController.text;
@@ -75,9 +100,16 @@ class _AddDataState extends State<AddData> {
               final gender = _genderController.text;
               final data = Provider.of<PendudukProvider>(context, listen: false);
               if (_key.currentState!.validate()) {
-                await data
-                    .addData(widget.idData!, nama, nik, telp, desaLurah, alamat, email, tempat, tanggal, gender)
-                    .then((value) => Navigator.pushReplacementNamed(context, Home.id));
+                if (!_isUpdate) {
+                  await data
+                      .addData(widget.idKec!, nama, nik, telp, desaLurah, alamat, email, tempat, tanggal, gender)
+                      .then((value) => Navigator.pushReplacementNamed(context, Home.id));
+                } else {
+                  await data
+                      .editData(widget.penduduk!.id!, widget.penduduk!.kecamatanId!, nama, nik, telp, desaLurah, alamat,
+                          email, tempat, tanggal, gender)
+                      .then((value) => Navigator.pushReplacementNamed(context, Home.id));
+                }
               }
             },
           ),
@@ -185,6 +217,7 @@ class _AddDataState extends State<AddData> {
                       _genderController.text = e!;
                     });
                   },
+                  value: _genderController.text,
                 ),
                 const SizedBox(height: 40),
               ],

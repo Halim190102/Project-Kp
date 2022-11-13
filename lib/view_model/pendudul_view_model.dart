@@ -28,4 +28,38 @@ class PendudukProvider with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  Future editData(
+    int id,
+    int kecId,
+    String nama,
+    String nik,
+    String telp,
+    String desaLurah,
+    String alamat,
+    String email,
+    String tempat,
+    String tanggal,
+    String gender,
+  ) async {
+    await Api().editDataPenduduk(
+      id,
+      kecId,
+      nama,
+      nik,
+      telp,
+      desaLurah,
+      alamat,
+      email,
+      tempat,
+      tanggal,
+      gender,
+    );
+    notifyListeners();
+  }
+
+  Future deleteData(int id) async {
+    await Api().deleteDataPenduduk(id);
+    notifyListeners();
+  }
 }

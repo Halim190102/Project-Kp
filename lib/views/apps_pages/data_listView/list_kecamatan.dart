@@ -30,7 +30,15 @@ class ListKecamatan extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => AddData(idData: id)));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddData(
+                    idKec: id,
+                    init: true,
+                  ),
+                ),
+              );
             },
             icon: const Icon(
               Icons.add_circle_rounded,

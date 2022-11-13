@@ -1,10 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
+import 'package:koperasi/view_model/kecamatan_view_model.dart';
+import 'package:koperasi/view_model/pendudul_view_model.dart';
+import 'package:koperasi/views/apps_pages/data_listView/add_data.dart';
 import 'package:koperasi/views/apps_pages/data_listView/data_penduduk.dart';
+import 'package:koperasi/views/apps_pages/home.dart';
 import 'package:koperasi/views/component/iconButton/iconbuttonservice.dart';
+import 'package:koperasi/views/component/theme/color.dart';
+import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-class ListPenduduk extends StatelessWidget {
+class ListPenduduk extends StatefulWidget {
   const ListPenduduk({
     Key? key,
     required this.d,
@@ -14,6 +21,11 @@ class ListPenduduk extends StatelessWidget {
   final List<Datapenduduk> d;
   final int dLength;
 
+  @override
+  State<ListPenduduk> createState() => _ListPendudukState();
+}
+
+class _ListPendudukState extends State<ListPenduduk> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +39,7 @@ class ListPenduduk extends StatelessWidget {
       width: double.infinity,
       child: ListView.separated(
         itemBuilder: (ctx, i) {
-          final penduduk = d[i];
+          final penduduk = widget.d[i];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -54,12 +66,25 @@ class ListPenduduk extends StatelessWidget {
                   ButtonServices(
                     icon: Icons.edit,
                     color: Colors.amber,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddData(
+                            penduduk: penduduk,
+                            init: false,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   ButtonServices(
                     icon: CupertinoIcons.clear_circled_solid,
                     color: Colors.red,
-                    onTap: () {},
+                    onTap: () async {
+                      final data = Provider.of<PendudukProvider>(context, listen: false);
+                      await dialog(context, data, penduduk);
+                    },
                   ),
                 ],
               ),
@@ -71,7 +96,42 @@ class ListPenduduk extends StatelessWidget {
             height: 12,
           );
         },
-        itemCount: dLength,
+        itemCount: widget.dLength,
+      ),
+    );
+  }
+
+  dialog(BuildContext context, PendudukProvider data, Datapenduduk penduduk) async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Hapus data ?'),
+        content: const Text('Data yang dihapus tidak dapat dikembalikan'),
+        actions: [
+          DialogButton(
+            color: green,
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          DialogButton(
+            color: orange,
+            child: const Text('Yes'),
+            onPressed: () async {
+              final kec = Provider.of<KecamatanProvider>(context, listen: false);
+              await data
+                  .deleteData(penduduk.id!)
+                  .then(
+                    (_) => Navigator.pop(context),
+                  )
+                  .then(
+                    (value) => kec.getKecamatan(),
+                  );
+            },
+          ),
+        ],
       ),
     );
   }
