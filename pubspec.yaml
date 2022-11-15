@@ -47,8 +47,8 @@ dependencies:
   cloud_firestore:
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0
-  rflutter_alert: ^2.0.4
+  intl:
+  rflutter_alert:
 
 dev_dependencies:
   flutter_test:

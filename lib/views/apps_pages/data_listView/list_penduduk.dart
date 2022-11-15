@@ -5,7 +5,6 @@ import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/apps_pages/data_listView/add_data.dart';
 import 'package:koperasi/views/apps_pages/data_listView/data_penduduk.dart';
-import 'package:koperasi/views/apps_pages/home.dart';
 import 'package:koperasi/views/component/iconButton/iconbuttonservice.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';
@@ -121,14 +120,10 @@ class _ListPendudukState extends State<ListPenduduk> {
             child: const Text('Yes'),
             onPressed: () async {
               final kec = Provider.of<KecamatanProvider>(context, listen: false);
-              await data
-                  .deleteData(penduduk.id!)
-                  .then(
-                    (_) => Navigator.pop(context),
-                  )
-                  .then(
-                    (value) => kec.getKecamatan(),
+              await data.deleteData(penduduk.id!).then(
+                    (_) => kec.getKecamatan(),
                   );
+              Future.delayed(Duration.zero, () => Navigator.pop(context));
             },
           ),
         ],

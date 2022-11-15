@@ -213,9 +213,27 @@ class _FormComDropdownState extends State<FormComDropdown> {
             isDense: true,
           ),
           value: widget.value!.isEmpty ? jenisKelamin : widget.value,
-          items: const [
-            DropdownMenuItem(value: "Pria", child: Text("Pria")),
-            DropdownMenuItem(value: "Wanita", child: Text("Wanita")),
+          items: [
+            DropdownMenuItem(
+              value: "Pria",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("Pria"),
+                  Icon(Icons.man),
+                ],
+              ),
+            ),
+            DropdownMenuItem(
+              value: "Wanita",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("Wanita"),
+                  Icon(Icons.woman),
+                ],
+              ),
+            ),
           ],
           onChanged: widget.data,
           validator: (e) {

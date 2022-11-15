@@ -13,14 +13,6 @@ class DataPendudukView extends StatefulWidget {
 
 class _DataPendudukViewState extends State<DataPendudukView> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     KecamatanProvider viewModel = Provider.of<KecamatanProvider>(context, listen: false);
     return RefreshIndicator(
