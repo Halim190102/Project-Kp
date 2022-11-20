@@ -1,4 +1,30 @@
-class DataPendudukModel {
+class DataPendudulModel {
+  String? message;
+  List<Data>? data;
+
+  DataPendudulModel({this.message, this.data});
+
+  DataPendudulModel.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
   int? id;
   int? kecamatanId;
   String? nama;
@@ -10,10 +36,9 @@ class DataPendudukModel {
   String? tempatLahir;
   String? tanggalLahir;
   String? jenisKelamin;
-  String? createdAt;
   String? updatedAt;
 
-  DataPendudukModel(
+  Data(
       {this.id,
       this.kecamatanId,
       this.nama,
@@ -25,10 +50,9 @@ class DataPendudukModel {
       this.tempatLahir,
       this.tanggalLahir,
       this.jenisKelamin,
-      this.createdAt,
       this.updatedAt});
 
-  DataPendudukModel.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     kecamatanId = json['kecamatan_id'];
     nama = json['nama'];
@@ -40,7 +64,6 @@ class DataPendudukModel {
     tempatLahir = json['tempat_lahir'];
     tanggalLahir = json['tanggal_lahir'];
     jenisKelamin = json['jenis_kelamin'];
-    createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
 
@@ -57,7 +80,6 @@ class DataPendudukModel {
     data['tempat_lahir'] = tempatLahir;
     data['tanggal_lahir'] = tanggalLahir;
     data['jenis_kelamin'] = jenisKelamin;
-    data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
   }

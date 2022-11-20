@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:koperasi/api/api.dart';
 
 class PendudukProvider with ChangeNotifier {
+  // getPenduduk() async {
+  //   pendududks = await Api().getPenduduk();
+  //   notifyListeners();
+  // }
+
   Future addData(
     int kecId,
     String nama,

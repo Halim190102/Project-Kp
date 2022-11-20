@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:koperasi/api/api.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
-
-enum ViewState {
-  none,
-  loading,
-  error,
-}
+import 'package:koperasi/model/penduduk_model.dart';
 
 class KecamatanProvider with ChangeNotifier {
   DataKecamatanModel? kecamatan;
-
-  ViewState _state = ViewState.none;
-  ViewState get state => _state;
-
-  changeState(ViewState s) {
-    _state = s;
-    notifyListeners();
-  }
+  DataPendudulModel? penduduks;
 
   getKecamatan() async {
-    changeState(ViewState.loading);
-    try {
-      kecamatan = await Api().getKecamatan();
-      notifyListeners();
-    } catch (e) {
-      changeState(ViewState.error);
-    }
+    kecamatan = await Api().getKecamatan();
+    penduduks = await Api().getPenduduk();
+
+    notifyListeners();
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:koperasi/view_model/appbar.dart';
 import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
+import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/apps_pages/akun.dart';
 import 'package:koperasi/views/apps_pages/data.dart';
 import 'package:koperasi/views/component/theme/color.dart';
@@ -23,6 +25,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
     });
@@ -47,7 +50,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final action = Provider.of<AppbarSearch>(context);
     return Scaffold(
+      appBar: <AppBar>[
+        AppBar(
+          title: const Text('Data Penduduk'),
+          actions: [
+            action.search == false
+                ? IconButton(
+                    onPressed: () {
+                      action.action();
+                    },
+                    icon: const Icon(Icons.search))
+                : IconButton(
+                    onPressed: () {
+                      action.action();
+                    },
+                    icon: const Icon(Icons.close),
+                  ),
+          ],
+        ),
+        AppBar()
+      ].elementAt(selectedIndex),
       backgroundColor: green,
       body: SafeArea(
         child: Center(

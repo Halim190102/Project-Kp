@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:koperasi/routes.dart';
+import 'package:koperasi/view_model/appbar.dart';
 import 'package:koperasi/view_model/image_services.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => PendudukProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => AppbarSearch(),
           ),
         ],
         child: MaterialApp(

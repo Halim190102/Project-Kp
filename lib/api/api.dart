@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
+import 'package:koperasi/model/penduduk_model.dart';
 
 class Api {
   final url = 'http://10.0.2.2:8000/api';
@@ -8,6 +9,11 @@ class Api {
   getKecamatan() async {
     Response response = await Dio().get('$url/kecamatan');
     return DataKecamatanModel.fromJson(response.data);
+  }
+
+  getPenduduk() async {
+    Response response = await Dio().get('$url/data');
+    return DataPendudulModel.fromJson(response.data);
   }
 
   // getPenduduk() async {
