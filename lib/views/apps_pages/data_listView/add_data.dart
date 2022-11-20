@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
 import 'package:koperasi/utils/validator.dart';
+import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/apps_pages/home.dart';
 import 'package:koperasi/views/component/form/textfield_component.dart';
@@ -79,7 +80,7 @@ class _AddDataState extends State<AddData> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, '');
             },
             icon: const Icon(CupertinoIcons.back)),
         centerTitle: true,
@@ -98,17 +99,27 @@ class _AddDataState extends State<AddData> {
               final tempat = _tempatController.text;
               final tanggal = _tglController.text;
               final gender = _genderController.text;
+              final kec = Provider.of<KecamatanProvider>(context, listen: false);
               final data = Provider.of<PendudukProvider>(context, listen: false);
+              FocusManager.instance.primaryFocus?.unfocus();
+
               if (_key.currentState!.validate()) {
                 if (!_isUpdate) {
                   await data
                       .addData(widget.idKec!, nama, nik, telp, desaLurah, alamat, email, tempat, tanggal, gender)
-                      .then((value) => Navigator.pushReplacementNamed(context, Home.id));
+                      .then(
+                        (value) => kec.getKecamatan(),
+                      )
+                      .then((value) => Navigator.pop(context));
                 } else {
                   await data
                       .editData(widget.penduduk!.id!, widget.penduduk!.kecamatanId!, nama, nik, telp, desaLurah, alamat,
                           email, tempat, tanggal, gender)
-                      .then((value) => Navigator.pushReplacementNamed(context, Home.id));
+                      .then(
+                        (value) => kec.getKecamatan(),
+                      )
+                      .then((value) => Navigator.pop(
+                          context, _namaController.text != widget.penduduk!.nama! ? _namaController.text : ''));
                 }
               }
             },

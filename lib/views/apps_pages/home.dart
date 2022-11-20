@@ -23,16 +23,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String? imgData;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
     });
-  }
-
-  @override
-  void initState() {
     setState(() {
       imgData = FireAuth.auth.currentUser!.photoURL!;
     });
@@ -70,7 +64,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
           ],
         ),
-        AppBar()
+        AppBar(
+          title: const Text('Profil'),
+          centerTitle: true,
+        )
       ].elementAt(selectedIndex),
       backgroundColor: green,
       body: SafeArea(

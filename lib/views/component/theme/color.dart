@@ -12,3 +12,5 @@ Color green = Colors.green;
 Color orangebright = const Color.fromARGB(255, 225, 77, 42);
 Color blues = const Color.fromARGB(255, 0, 18, 83);
 Color rawOrange = const Color.fromARGB(255, 252, 214, 178);
+
+TextStyle text = const TextStyle(fontSize: 11.5);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
+import 'package:koperasi/views/component/theme/color.dart';
 
 class DialogData extends StatelessWidget {
   const DialogData({Key? key, required this.data}) : super(key: key);
@@ -74,7 +75,7 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       d,
-      style: const TextStyle(fontSize: 11.5),
+      style: text,
     );
   }
 }
