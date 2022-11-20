@@ -46,20 +46,5 @@ class ButtonCom extends StatelessWidget {
         ],
       ),
     );
-    // return ElevatedButton(
-    //   onPressed: onTap,
-    //   style: ElevatedButton.styleFrom(
-    //     primary: color1,
-    //     minimumSize: const Size(double.infinity, 50),
-    //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: color2)),
-    //   ),
-    //   child: Text(
-    //     text,
-    //     textAlign: TextAlign.center,
-    //     style: TextStyle(
-    //       color: color3,
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:koperasi/view_model/appbar.dart';
+import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/views/apps_pages/akun.dart';
 import 'package:koperasi/views/apps_pages/data.dart';
+import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
@@ -13,14 +16,20 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int selectedIndex = 0;
   late PageController _pageController;
+  String? imgData;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
+    });
+    setState(() {
+      imgData = FireAuth.auth.currentUser!.photoURL!;
+    });
     super.initState();
-    Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
     _pageController = PageController(initialPage: selectedIndex);
   }
 
@@ -34,22 +43,51 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final action = Provider.of<AppbarSearch>(context);
     return Scaffold(
-      backgroundColor: Colors.lightGreenAccent,
+      appBar: <AppBar>[
+        AppBar(
+          title: const Text('Data Penduduk'),
+          actions: [
+            action.search == false
+                ? IconButton(
+                    onPressed: () {
+                      action.action();
+                    },
+                    icon: const Icon(Icons.search))
+                : IconButton(
+                    onPressed: () {
+                      action.action();
+                    },
+                    icon: const Icon(Icons.close),
+                  ),
+          ],
+        ),
+        AppBar(
+          title: const Text('Profil'),
+          centerTitle: true,
+        )
+      ].elementAt(selectedIndex),
+      backgroundColor: green,
       body: SafeArea(
         child: Center(
           child: PageView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
-            children: _listOfWidget,
+            children: [
+              const DataPendudukView(),
+              MyAkun(
+                imgData: imgData!,
+              ),
+            ],
           ),
         ),
       ),
       bottomNavigationBar: SlidingClippedNavBar(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: orangebright,
         onButtonPressed: onButtonPressed,
         iconSize: 30,
-        activeColor: const Color(0xFF01579B),
+        activeColor: blues,
         selectedIndex: selectedIndex,
         barItems: <BarItem>[
           BarItem(
@@ -65,8 +103,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-List<Widget> _listOfWidget = <Widget>[
-  const DataPenduduk(),
-  const MyAkun(),
-];

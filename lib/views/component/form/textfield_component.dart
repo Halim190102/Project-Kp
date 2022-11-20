@@ -23,7 +23,6 @@ class FormCom extends StatefulWidget {
 
 class _FormComState extends State<FormCom> {
   bool _passwordVisible = true;
-  bool submit = true;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +80,169 @@ class _FormComState extends State<FormCom> {
         //   });
         // },
         validator: widget.valid,
+      ),
+    );
+  }
+}
+
+class FormComDate extends StatefulWidget {
+  const FormComDate({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.onTap,
+  }) : super(key: key);
+  final TextEditingController controller;
+  final String label;
+  final Function() onTap;
+
+  @override
+  State<FormComDate> createState() => _FormComDateState();
+}
+
+class _FormComDateState extends State<FormComDate> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 25),
+      child: Row(
+        children: [
+          Flexible(
+            child: TextFormField(
+              // onTap: widget.onTap,
+              readOnly: true,
+              textAlign: TextAlign.left,
+              controller: widget.controller,
+              decoration: InputDecoration(
+                prefixIcon: IconButton(
+                  onPressed: widget.onTap,
+                  icon: Icon(
+                    Icons.calendar_month,
+                    color: black,
+                  ),
+                ),
+                fillColor: grey,
+                filled: true,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18.5),
+                hintText: widget.label,
+                hintStyle: const TextStyle(
+                  fontSize: 15,
+                ),
+                isDense: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Tanggal lahir tidak boleh kosong';
+                }
+                return null;
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FormComDropdown extends StatefulWidget {
+  const FormComDropdown({
+    Key? key,
+    required this.label,
+    required this.data,
+    this.value,
+  }) : super(key: key);
+  final String label;
+  final Function(String?) data;
+  final String? value;
+
+  @override
+  State<FormComDropdown> createState() => _FormComDropdownState();
+}
+
+class _FormComDropdownState extends State<FormComDropdown> {
+  String? jenisKelamin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 25),
+      child: ButtonTheme(
+        alignedDropdown: true,
+        child: DropdownButtonFormField(
+          borderRadius: BorderRadius.circular(10),
+          decoration: InputDecoration(
+            fillColor: grey,
+            filled: true,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18.5),
+            hintText: widget.label,
+            hintStyle: const TextStyle(
+              fontSize: 15,
+            ),
+            isDense: true,
+          ),
+          value: widget.value!.isEmpty ? jenisKelamin : widget.value,
+          items: [
+            DropdownMenuItem(
+              value: "Pria",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("Pria"),
+                  Icon(Icons.man),
+                ],
+              ),
+            ),
+            DropdownMenuItem(
+              value: "Wanita",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("Wanita"),
+                  Icon(Icons.woman),
+                ],
+              ),
+            ),
+          ],
+          onChanged: widget.data,
+          validator: (e) {
+            if (e == null) {
+              return 'Tanggal lahir tidak boleh kosong';
+            }
+            return null;
+          },
+        ),
       ),
     );
   }
