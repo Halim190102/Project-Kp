@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
-import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/apps_pages/data_listView/add_data.dart';
 import 'package:koperasi/views/apps_pages/data_listView/data_penduduk.dart';
@@ -9,7 +8,6 @@ import 'package:koperasi/views/apps_pages/data_listView/dialog_delete.dart';
 import 'package:koperasi/views/component/iconButton/iconbuttonservice.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ListPenduduk extends StatefulWidget {
   const ListPenduduk({

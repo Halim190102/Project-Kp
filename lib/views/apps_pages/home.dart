@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:koperasi/view_model/appbar.dart';
 import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
-import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/apps_pages/akun.dart';
 import 'package:koperasi/views/apps_pages/data.dart';
 import 'package:koperasi/views/component/theme/color.dart';

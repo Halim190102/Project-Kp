@@ -5,7 +5,6 @@ import 'package:koperasi/model/kecamatan_model.dart';
 import 'package:koperasi/utils/validator.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
-import 'package:koperasi/views/apps_pages/home.dart';
 import 'package:koperasi/views/component/form/textfield_component.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';

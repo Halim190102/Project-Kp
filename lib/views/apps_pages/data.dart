@@ -11,7 +11,6 @@ import 'package:koperasi/views/apps_pages/data_listView/listview_kecamatan.dart'
 import 'package:koperasi/views/component/animation/loading.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DataPendudukView extends StatefulWidget {
   const DataPendudukView({Key? key}) : super(key: key);
