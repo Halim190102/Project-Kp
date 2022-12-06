@@ -75,7 +75,6 @@ class _FormComState extends State<FormCom> {
           hintStyle: const TextStyle(
             fontSize: 15,
           ),
-          // border: const OutlineInputBorder(),
           isDense: true,
           suffixIcon: widget.icon
               ? _icon
