@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
+import 'package:koperasi/view_model/pendudul_view_model.dart';
+import 'package:koperasi/views/apps_pages/data_listView/add_data.dart';
+import 'package:koperasi/views/apps_pages/data_listView/data_penduduk.dart';
+import 'package:koperasi/views/apps_pages/data_listView/dialog_delete.dart';
 import 'package:koperasi/views/component/iconButton/iconbuttonservice.dart';
+import 'package:koperasi/views/component/theme/color.dart';
+import 'package:provider/provider.dart';
 
-class ListPenduduk extends StatelessWidget {
+class ListPenduduk extends StatefulWidget {
   const ListPenduduk({
     Key? key,
     required this.d,
@@ -13,6 +19,11 @@ class ListPenduduk extends StatelessWidget {
   final List<Datapenduduk> d;
   final int dLength;
 
+  @override
+  State<ListPenduduk> createState() => _ListPendudukState();
+}
+
+class _ListPendudukState extends State<ListPenduduk> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,15 +37,13 @@ class ListPenduduk extends StatelessWidget {
       width: double.infinity,
       child: ListView.separated(
         itemBuilder: (ctx, i) {
-          final penduduk = d[i];
+          final penduduk = widget.d[i];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 '${i + 1}. ${penduduk.nama!}',
-                style: const TextStyle(
-                  fontSize: 11.5,
-                ),
+                style: text,
               ),
               Wrap(
                 spacing: 5,
@@ -42,17 +51,39 @@ class ListPenduduk extends StatelessWidget {
                   ButtonServices(
                     icon: Icons.menu_open,
                     color: Colors.black,
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => DialogData(data: penduduk),
+                      );
+                    },
                   ),
                   ButtonServices(
                     icon: Icons.edit,
                     color: Colors.amber,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddData(
+                            penduduk: penduduk,
+                            init: false,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   ButtonServices(
                     icon: CupertinoIcons.clear_circled_solid,
                     color: Colors.red,
-                    onTap: () {},
+                    onTap: () async {
+                      final data = Provider.of<PendudukProvider>(context, listen: false);
+                      await showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (_) => AlertDialogWidget(data: data, dataPen: penduduk));
+                    },
                   ),
                 ],
               ),
@@ -64,7 +95,7 @@ class ListPenduduk extends StatelessWidget {
             height: 12,
           );
         },
-        itemCount: dLength,
+        itemCount: widget.dLength,
       ),
     );
   }

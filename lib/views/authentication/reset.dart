@@ -60,7 +60,12 @@ class _ResetPassState extends State<ResetPass> {
                     if (status == AuthStatus.successful) {
                       LoaderX.hide();
                       if (!mounted) return;
-                      Navigator.pushReplacementNamed(context, LoginPage.id);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const LoginPage(),
+                        ),
+                      );
                     } else {
                       LoaderX.hide();
                       final error = AuthExceptionHandler.generateErrorMessage(status);

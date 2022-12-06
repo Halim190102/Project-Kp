@@ -16,7 +16,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 70,
+      radius: 60,
       child: ClipOval(
         child: Image.network(
           widget.foto,

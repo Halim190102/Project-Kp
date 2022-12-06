@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,9 +14,9 @@ class ImageServices with ChangeNotifier {
     return await ImagePicker().pickImage(source: ImageSource.camera);
   }
 
-  Future<String> uploadImage(File imageFile, String uid, String name) async {
+  Future<String> uploadImage(Uint8List imageFile, String uid, String name) async {
     Reference ref = FirebaseStorage.instance.ref().child('$uid/$name');
-    await ref.putFile(imageFile);
+    await ref.putData(imageFile);
     notifyListeners();
     return ref.getDownloadURL();
   }
@@ -27,15 +27,3 @@ class ImageServices with ChangeNotifier {
     notifyListeners();
   }
 }
-
-  // Future<XFile?> getImage() async {
-  //   XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   notifyListeners();
-  //   return file;
-  // }
-
-  // Future<XFile?> getPhoto() async {
-  //   XFile? file = await ImagePicker().pickImage(source: ImageSource.camera);
-  //   notifyListeners();
-  //   return file;
-  // }

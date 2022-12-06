@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:koperasi/api/kecamatan_api.dart';
+import 'package:koperasi/api/api.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
+import 'package:koperasi/model/penduduk_model.dart';
 
 class KecamatanProvider with ChangeNotifier {
-  final Api api = Api();
   DataKecamatanModel? kecamatan;
+  DataPendudulModel? penduduks;
 
-  Future getKecamatan() async {
-    kecamatan = await api.getKecamatan();
+  getKecamatan() async {
+    kecamatan = await Api().getKecamatan();
+    penduduks = await Api().getPenduduk();
+
     notifyListeners();
   }
 }

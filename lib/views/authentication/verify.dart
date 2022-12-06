@@ -27,7 +27,12 @@ class _VerifyState extends State<Verify> {
         timer.cancel();
         if (!mounted) return;
         FireAuth.logout();
-        Navigator.pushReplacementNamed(context, LoginPage.id);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const LoginPage(),
+          ),
+        );
       }
     });
   }

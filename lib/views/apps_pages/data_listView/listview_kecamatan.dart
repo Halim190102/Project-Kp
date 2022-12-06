@@ -20,6 +20,7 @@ class _ListDataState extends State<ListData> {
   @override
   Widget build(BuildContext context) {
     final data = widget.myData;
+    final id = data.id;
     final d = data.datapenduduk!;
     final dLength = d.length;
 
@@ -29,12 +30,15 @@ class _ListDataState extends State<ListData> {
       ),
       decoration: BoxDecoration(
         color: Colors.white70,
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ListKecamatan(kecamatans: widget.myData.kecamatan),
+          ListKecamatan(
+            kecamatans: widget.myData.kecamatan,
+            id: id,
+          ),
           Container(
             decoration: BoxDecoration(
               color: Colors.black,
