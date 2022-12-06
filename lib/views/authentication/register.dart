@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:koperasi/utils/loader.dart';
 import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/utils/validator.dart';
@@ -12,7 +13,6 @@ import 'package:koperasi/views/component/snackbar/snackbar.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 
 class RegisterPage extends StatefulWidget {
-  static const String id = 'register_page';
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
     _nameController.dispose();
     _emailController.dispose();
-    _nameController.dispose();
+    _nikController.dispose();
     _passwordController.dispose();
   }
 
@@ -58,7 +58,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: const EdgeInsets.all(12),
                       child: InkWell(
-                        onTap: () => Navigator.pushReplacementNamed(context, LoginPage.id),
+                        onTap: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            maintainState: false,
+                            builder: (_) => const LoginPage(),
+                          ),
+                        ),
                         child: const Icon(
                           Icons.close,
                           size: 34,
@@ -105,6 +111,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 icon: false,
                                 obscure: false,
                                 textCapitalization: TextCapitalization.none,
+                                type: TextInputType.number,
+                                format: [FilteringTextInputFormatter.digitsOnly],
                               ),
                               FormCom(
                                 controller: _passwordController,
@@ -129,11 +137,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                     final status = await FireAuth.regis(email: email, pass: pass, nama: nama);
                                     if (status == AuthStatus.successful) {
                                       LoaderX.hide();
-                                      if (!mounted) return;
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => const Verify(),
-                                      );
+                                      Future.delayed(Duration.zero, () async {
+                                        await FireAuth.logout();
+                                        if (!mounted) return;
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            maintainState: false,
+                                            builder: (_) => const LoginPage(),
+                                          ),
+                                        );
+                                      });
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (_) => const Verify(),
+                                      // );
                                     } else {
                                       LoaderX.hide();
                                       final error = AuthExceptionHandler.generateErrorMessage(status);
@@ -150,7 +168,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 children: [
                                   TextCom(
                                     text1: 'Login',
-                                    onTap: () => Navigator.pushReplacementNamed(context, LoginPage.id),
+                                    onTap: () => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        maintainState: false,
+                                        builder: (_) => const LoginPage(),
+                                      ),
+                                    ),
                                     color: blue,
                                   ),
                                 ],

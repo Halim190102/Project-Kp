@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
 import 'package:koperasi/utils/validator.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
 import 'package:koperasi/view_model/pendudul_view_model.dart';
 import 'package:koperasi/views/component/form/textfield_component.dart';
+import 'package:koperasi/views/component/snackbar/snackbar.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';
 
@@ -42,17 +44,18 @@ class _AddDataState extends State<AddData> {
   @override
   void initState() {
     super.initState();
-    if (widget.penduduk != null) {
-      idPenduduk = widget.penduduk!.id;
-      _namaController.text = widget.penduduk!.nama!;
-      _nikController.text = widget.penduduk!.nik!;
-      _telpController.text = widget.penduduk!.telp!;
-      _desalurahController.text = widget.penduduk!.desaLurah!;
-      _alamatController.text = widget.penduduk!.alamat!;
-      _emailController.text = widget.penduduk!.email!;
-      _tempatController.text = widget.penduduk!.tempatLahir!;
-      _tglController.text = widget.penduduk!.tanggalLahir!;
-      _genderController.text = widget.penduduk!.jenisKelamin!;
+    final d = widget.penduduk;
+    if (d != null) {
+      idPenduduk = d.id;
+      _namaController.text = d.nama!;
+      _nikController.text = d.nik!;
+      _telpController.text = d.telp!;
+      _desalurahController.text = d.desaLurah!;
+      _alamatController.text = d.alamat!;
+      _emailController.text = d.email!;
+      _tempatController.text = d.tempatLahir!;
+      _tglController.text = d.tanggalLahir!;
+      _genderController.text = d.jenisKelamin!;
       _isUpdate = true;
     }
   }
@@ -78,10 +81,11 @@ class _AddDataState extends State<AddData> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context, '');
-            },
-            icon: const Icon(CupertinoIcons.back)),
+          onPressed: () {
+            Navigator.pop(context, '');
+          },
+          icon: const Icon(CupertinoIcons.back),
+        ),
         centerTitle: true,
         backgroundColor: red,
         title: Text(widget.init ? 'Tambah Data' : 'Edit Data'),
@@ -89,6 +93,8 @@ class _AddDataState extends State<AddData> {
           IconButton(
             icon: Icon(widget.init ? Icons.add : Icons.save),
             onPressed: () async {
+              final d = widget.penduduk;
+
               final nama = _namaController.text;
               final nik = _nikController.text;
               final telp = _telpController.text;
@@ -111,14 +117,32 @@ class _AddDataState extends State<AddData> {
                       )
                       .then((value) => Navigator.pop(context));
                 } else {
-                  await data
-                      .editData(widget.penduduk!.id!, widget.penduduk!.kecamatanId!, nama, nik, telp, desaLurah, alamat,
-                          email, tempat, tanggal, gender)
-                      .then(
-                        (value) => kec.getKecamatan(),
-                      )
-                      .then((value) => Navigator.pop(
-                          context, _namaController.text != widget.penduduk!.nama! ? _namaController.text : ''));
+                  final condition = nama != d!.nama! ||
+                      nik != d.nik! ||
+                      telp != d.telp! ||
+                      desaLurah != d.desaLurah! ||
+                      alamat != d.alamat! ||
+                      email != d.email! ||
+                      tempat != d.tempatLahir! ||
+                      tanggal != d.tanggalLahir! ||
+                      gender != d.jenisKelamin!;
+                  if (condition) {
+                    await data
+                        .editData(
+                            d.id!, d.kecamatanId!, nama, nik, telp, desaLurah, alamat, email, tempat, tanggal, gender)
+                        .then(
+                          (value) => kec.getKecamatan(),
+                        )
+                        .then((value) => Navigator.pop(context, nama != widget.penduduk!.nama! ? nama : ''));
+                  } else {
+                    CustomSnackBar.showErrorSnackBar(
+                      context,
+                      message: 'Tidak ada yang berubah !!',
+                    );
+                    Future.delayed(const Duration(milliseconds: 2900), () {
+                      Navigator.pop(context, '');
+                    });
+                  }
                 }
               }
             },
@@ -147,6 +171,8 @@ class _AddDataState extends State<AddData> {
                   icon: false,
                   obscure: false,
                   textCapitalization: TextCapitalization.none,
+                  type: TextInputType.number,
+                  format: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 FormCom(
                   controller: _telpController,
@@ -160,6 +186,8 @@ class _AddDataState extends State<AddData> {
                   icon: false,
                   obscure: false,
                   textCapitalization: TextCapitalization.none,
+                  type: TextInputType.number,
+                  format: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 FormCom(
                   controller: _desalurahController,
