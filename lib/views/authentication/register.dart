@@ -5,7 +5,6 @@ import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/utils/validator.dart';
 import 'package:koperasi/view_model/authentication/firebase_exceptions.dart';
 import 'package:koperasi/views/authentication/login.dart';
-import 'package:koperasi/views/authentication/verify.dart';
 import 'package:koperasi/views/component/form/button_component.dart';
 import 'package:koperasi/views/component/form/text_component.dart';
 import 'package:koperasi/views/component/form/textfield_component.dart';
