@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
 import 'package:koperasi/utils/validator.dart';
@@ -170,6 +171,8 @@ class _AddDataState extends State<AddData> {
                   icon: false,
                   obscure: false,
                   textCapitalization: TextCapitalization.none,
+                  type: TextInputType.number,
+                  format: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 FormCom(
                   controller: _telpController,
@@ -183,6 +186,8 @@ class _AddDataState extends State<AddData> {
                   icon: false,
                   obscure: false,
                   textCapitalization: TextCapitalization.none,
+                  type: TextInputType.number,
+                  format: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 FormCom(
                   controller: _desalurahController,

@@ -120,7 +120,7 @@ class _DataPendudukViewState extends State<DataPendudukView> {
                           .kecamatan;
                       return Card(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: ListTile(
                           title: Text(

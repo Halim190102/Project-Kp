@@ -58,7 +58,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: const EdgeInsets.all(12),
                       child: InkWell(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            maintainState: false,
+                            builder: (_) => const LoginPage(),
+                          ),
+                        ),
                         child: const Icon(
                           Icons.close,
                           size: 34,
@@ -134,7 +140,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Future.delayed(Duration.zero, () async {
                                         await FireAuth.logout();
                                         if (!mounted) return;
-                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            maintainState: false,
+                                            builder: (_) => const LoginPage(),
+                                          ),
+                                        );
                                       });
                                       // showDialog(
                                       //   context: context,
@@ -156,7 +168,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 children: [
                                   TextCom(
                                     text1: 'Login',
-                                    onTap: () => Navigator.pop(context),
+                                    onTap: () => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        maintainState: false,
+                                        builder: (_) => const LoginPage(),
+                                      ),
+                                    ),
                                     color: blue,
                                   ),
                                 ],

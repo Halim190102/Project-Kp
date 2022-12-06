@@ -31,11 +31,6 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
   }
 
-  void clear() {
-    _emailController.clear();
-    _passwordController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -123,15 +118,11 @@ class _LoginPageState extends State<LoginPage> {
                             TextCom(
                               text1: 'Daftar',
                               onTap: () {
-                                clear();
-                                Future.delayed(
-                                  Duration.zero,
-                                  () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      maintainState: false,
-                                      builder: (_) => const RegisterPage(),
-                                    ),
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    maintainState: false,
+                                    builder: (_) => const RegisterPage(),
                                   ),
                                 );
                               },
