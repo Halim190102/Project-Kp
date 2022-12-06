@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:koperasi/view_model/appbar.dart';
-import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
-import 'package:koperasi/views/apps_pages/akun.dart';
 import 'package:koperasi/views/apps_pages/data.dart';
+import 'package:koperasi/views/apps_pages/drawer.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 import 'package:provider/provider.dart';
-import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 class Home extends StatefulWidget {
-  static const String id = 'home';
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -17,89 +14,32 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  int selectedIndex = 0;
-  late PageController _pageController;
-  String? imgData;
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Provider.of<KecamatanProvider>(context, listen: false).getKecamatan();
     });
-    setState(() {
-      imgData = FireAuth.auth.currentUser!.photoURL!;
-    });
     super.initState();
-    _pageController = PageController(initialPage: selectedIndex);
-  }
-
-  void onButtonPressed(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-    _pageController.animateToPage(selectedIndex,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeOutQuad);
   }
 
   @override
   Widget build(BuildContext context) {
     final action = Provider.of<AppbarSearch>(context);
     return Scaffold(
-      appBar: <AppBar>[
-        AppBar(
-          title: const Text('Data Penduduk'),
-          actions: [
-            action.search == false
-                ? IconButton(
-                    onPressed: () {
-                      action.action();
-                    },
-                    icon: const Icon(Icons.search))
-                : IconButton(
-                    onPressed: () {
-                      action.action();
-                    },
-                    icon: const Icon(Icons.close),
-                  ),
-          ],
-        ),
-        AppBar(
-          title: const Text('Profil'),
-          centerTitle: true,
-        )
-      ].elementAt(selectedIndex),
-      backgroundColor: green,
-      body: SafeArea(
-        child: Center(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _pageController,
-            children: [
-              const DataPendudukView(),
-              MyAkun(
-                imgData: imgData!,
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: SlidingClippedNavBar(
-        backgroundColor: orangebright,
-        onButtonPressed: onButtonPressed,
-        iconSize: 30,
-        activeColor: blues,
-        selectedIndex: selectedIndex,
-        barItems: <BarItem>[
-          BarItem(
-            icon: Icons.home,
-            title: 'Home',
-          ),
-          BarItem(
-            icon: Icons.account_circle,
-            title: 'Akun',
+      drawer: const MyDrawer(),
+      appBar: AppBar(
+        title: const Text('Data Penduduk'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              action.action();
+            },
+            icon: Icon(action.search == false ? Icons.search : Icons.close),
           ),
         ],
       ),
+      backgroundColor: green,
+      body: const DataPendudukView(),
     );
   }
 }

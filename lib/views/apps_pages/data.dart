@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koperasi/model/kecamatan_model.dart';
 import 'package:koperasi/model/penduduk_model.dart';
@@ -42,8 +43,6 @@ class _DataPendudukViewState extends State<DataPendudukView> {
 
   @override
   Widget build(BuildContext context) {
-    // AppbarSearch action = Provider.of<AppbarSearch>(context);
-
     return Consumer<KecamatanProvider>(
       builder: (context, value, child) {
         final data1 = value.kecamatan;
@@ -75,7 +74,17 @@ class _DataPendudukViewState extends State<DataPendudukView> {
                   padding: const EdgeInsets.all(8),
                   margin: const EdgeInsets.only(bottom: 12),
                   child: TextField(
-                    decoration: const InputDecoration(hintText: 'Cari Nama...'),
+                    decoration: InputDecoration(
+                        hintText: 'Cari Nama...',
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                onPressed: () {
+                                  items.clear();
+                                  _searchController.clear();
+                                  setState(() {});
+                                },
+                                icon: const Icon(CupertinoIcons.clear_circled))
+                            : null),
                     controller: _searchController,
                     onChanged: (query) {
                       if (query.isNotEmpty) {

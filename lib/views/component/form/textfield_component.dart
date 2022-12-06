@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 
 class FormCom extends StatefulWidget {
@@ -10,7 +11,11 @@ class FormCom extends StatefulWidget {
     required this.icon,
     required this.obscure,
     required this.textCapitalization,
+    this.type,
+    this.format,
   }) : super(key: key);
+  final List<TextInputFormatter>? format;
+  final TextInputType? type;
   final TextEditingController controller;
   final String? Function(String?) valid;
   final bool icon, obscure;
@@ -23,12 +28,26 @@ class FormCom extends StatefulWidget {
 
 class _FormComState extends State<FormCom> {
   bool _passwordVisible = true;
+  bool _icon = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 25),
       child: TextFormField(
+        onChanged: (e) {
+          if (e.isNotEmpty) {
+            setState(() {
+              _icon = true;
+            });
+          } else {
+            setState(() {
+              _icon = false;
+            });
+          }
+        },
+        inputFormatters: widget.format,
+        keyboardType: widget.type,
         textCapitalization: widget.textCapitalization,
         textAlign: TextAlign.left,
         controller: widget.controller,
@@ -59,17 +78,24 @@ class _FormComState extends State<FormCom> {
           // border: const OutlineInputBorder(),
           isDense: true,
           suffixIcon: widget.icon
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
-                    color: black,
-                  ),
-                )
+              ? _icon
+                  ? GestureDetector(
+                      onTapDown: (_) {
+                        setState(() {
+                          _passwordVisible = false;
+                        });
+                      },
+                      onTapUp: (_) {
+                        setState(() {
+                          _passwordVisible = true;
+                        });
+                      },
+                      child: Icon(
+                        _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                        color: black,
+                      ),
+                    )
+                  : null
               : null,
         ),
         // autovalidateMode: submit ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,

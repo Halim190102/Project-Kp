@@ -1,5 +1,6 @@
-import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:koperasi/view_model/authentication/auth.dart';
 import 'package:koperasi/view_model/image_services.dart';
@@ -8,8 +9,7 @@ import 'package:koperasi/views/component/circleAvatar/circle.dart';
 import 'package:provider/provider.dart';
 
 class MyAkun extends StatefulWidget {
-  const MyAkun({super.key, required this.imgData});
-  final String imgData;
+  const MyAkun({super.key});
 
   @override
   State<MyAkun> createState() => _MyAkunState();
@@ -17,28 +17,50 @@ class MyAkun extends StatefulWidget {
 
 class _MyAkunState extends State<MyAkun> {
   @override
-  void initState() {
-    super.initState();
-    setState(() {
-      oldImage = widget.imgData;
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var url = FirebaseAuth.instance.currentUser!.photoURL;
+    if (url != null) {
+      setState(() {
+        oldImage = url;
+      });
+    }
   }
 
-  String? oldImage;
+  upload(XFile? file) async {
+    final providerImage = Provider.of<ImageServices>(context, listen: false);
+
+    Uint8List filess = await file!.readAsBytes();
+    imagePath = await providerImage.uploadImage(filess, uid, file.name);
+    FireAuth.auth.currentUser!.updatePhotoURL(imagePath!).whenComplete(() {
+      if (oldImage.isNotEmpty) {
+        providerImage.delete(oldImage);
+        Future.delayed(Duration.zero, () {
+          oldImage = imagePath!;
+        });
+      } else {
+        oldImage = imagePath!;
+      }
+    });
+    setState(() {});
+  }
+
+  String oldImage = '';
   String? imagePath;
   final uid = FireAuth.auth.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
-    final providerIamge = Provider.of<ImageServices>(context, listen: false);
+    final providerImage = Provider.of<ImageServices>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
           imagePath == null
-              ? ProfilePicture(foto: oldImage!)
+              ? ProfilePicture(foto: oldImage)
               : CircleAvatar(
-                  radius: 80,
+                  radius: 60,
                   backgroundImage: NetworkImage(imagePath!),
                 ),
           const SizedBox(height: 10),
@@ -47,17 +69,8 @@ class _MyAkunState extends State<MyAkun> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  final foto = FireAuth.auth.currentUser!.photoURL!;
-                  setState(() {
-                    oldImage = foto;
-                  });
-                  XFile? file = await providerIamge.getImage();
-                  imagePath = await providerIamge.uploadImage(File(file!.path), uid, file.name);
-                  FireAuth.auth.currentUser!
-                      .updatePhotoURL(imagePath!)
-                      .whenComplete(() => providerIamge.delete(oldImage!));
-
-                  setState(() {});
+                  XFile? file = await providerImage.getImage();
+                  upload(file);
                 },
                 child: const Text(
                   'Galery',
@@ -67,19 +80,8 @@ class _MyAkunState extends State<MyAkun> {
                 margin: const EdgeInsets.only(left: 4),
                 child: ElevatedButton(
                   onPressed: () async {
-                    final foto = FireAuth.auth.currentUser!.photoURL!;
-                    setState(() {
-                      oldImage = foto;
-                    });
-                    XFile? file = await providerIamge.getPhoto();
-                    imagePath = await providerIamge.uploadImage(File(file!.path), uid, file.name);
-                    FireAuth.auth.currentUser!
-                        .updatePhotoURL(imagePath!)
-                        .whenComplete(() => providerIamge.delete(oldImage!));
-
-                    setState(() {
-                      FireAuth.auth.currentUser!.updatePhotoURL(imagePath!);
-                    });
+                    XFile? file = await providerImage.getPhoto();
+                    upload(file);
                   },
                   child: const Text(
                     'Camera',
@@ -94,7 +96,12 @@ class _MyAkunState extends State<MyAkun> {
               await FireAuth.logout();
               if (!mounted) return;
               if (FireAuth.auth.currentUser == null) {
-                Navigator.pushReplacementNamed(context, LoginPage.id);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const LoginPage(),
+                  ),
+                );
               }
             },
             child: const Text('Log Out'),

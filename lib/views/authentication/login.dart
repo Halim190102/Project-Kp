@@ -13,7 +13,6 @@ import 'package:koperasi/views/component/snackbar/snackbar.dart';
 import 'package:koperasi/views/component/theme/color.dart';
 
 class LoginPage extends StatefulWidget {
-  static const String id = 'login_page';
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -30,6 +29,11 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  void clear() {
+    _emailController.clear();
+    _passwordController.clear();
   }
 
   @override
@@ -95,7 +99,12 @@ class _LoginPageState extends State<LoginPage> {
                               if (status == AuthStatus.successful) {
                                 LoaderX.hide();
                                 if (!mounted) return;
-                                Navigator.pushReplacementNamed(context, Home.id);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const Home(),
+                                  ),
+                                );
                               } else {
                                 LoaderX.hide();
                                 final error = AuthExceptionHandler.generateErrorMessage(status);
@@ -114,18 +123,28 @@ class _LoginPageState extends State<LoginPage> {
                             TextCom(
                               text1: 'Daftar',
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, RegisterPage.id);
+                                clear();
+                                Future.delayed(
+                                  Duration.zero,
+                                  () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      maintainState: false,
+                                      builder: (_) => const RegisterPage(),
+                                    ),
+                                  ),
+                                );
                               },
                               color: blue,
                             ),
-                            TextCom(
-                              onTap: () => showDialog(
-                                context: context,
-                                builder: (_) => const ResetPass(),
-                              ),
-                              text1: 'Lupa Password',
-                              color: orange,
-                            )
+                            // TextCom(
+                            //   onTap: () => showDialog(
+                            //     context: context,
+                            //     builder: (_) => const ResetPass(),
+                            //   ),
+                            //   text1: 'Lupa Password',
+                            //   color: orange,
+                            // )
                           ],
                         ),
                       ],

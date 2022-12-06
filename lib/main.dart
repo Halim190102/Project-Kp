@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:koperasi/routes.dart';
 import 'package:koperasi/view_model/appbar.dart';
 import 'package:koperasi/view_model/image_services.dart';
 import 'package:koperasi/view_model/kecamatan_view_model.dart';
@@ -53,9 +52,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: FirebaseAuth.instance.currentUser == null ? LoginPage.id : Home.id,
-          onGenerateRoute: MyRouter.generateRoute,
-          // home: LoginPage(),
+          home: FirebaseAuth.instance.currentUser == null ? const LoginPage() : const Home(),
         ),
       ),
     );
