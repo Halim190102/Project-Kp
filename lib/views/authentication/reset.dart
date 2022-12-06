@@ -78,36 +78,6 @@ class _ResetPassState extends State<ResetPass> {
                   }
                 },
               ),
-              // CircleAvatar(
-              //   radius: 25,
-              //   backgroundColor: green,
-              //   child: IconButton(
-              //     icon: Icon(
-              //       Icons.save,
-              //       color: white,
-              //     ),
-              // onPressed: () async {
-              //   String email = _emailController.text.trim();
-              //   if (_key.currentState!.validate()) {
-              //     LoaderX.show(context);
-              //     final status = await FireAuth.reset(email: email);
-              //     if (status == AuthStatus.successful) {
-              //       LoaderX.hide();
-              //       if (!mounted) return;
-              //       Navigator.pop(context);
-              //     } else {
-              //       LoaderX.hide();
-              //       final error = AuthExceptionHandler.generateErrorMessage(status);
-              //       if (!mounted) return;
-              //       CustomSnackBar.showErrorSnackBar(
-              //         context,
-              //         message: error,
-              //       );
-              //     }
-              //   }
-              // },
-              //   ),
-              // ),
             ],
           ),
         ),
